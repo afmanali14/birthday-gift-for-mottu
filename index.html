@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Birthday Surprise</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+
+<style>
+
+html,body{
+margin:0;
+padding:0;
+height:100%;
+overflow:hidden;
+background:#ffd1e8;
+}
+
+/* Intro Screen */
+#intro{
+position:fixed;
+inset:0;
+background:black;
+display:flex;
+align-items:center;
+justify-content:center;
+color:white;
+font-size:26px;
+cursor:pointer;
+z-index:999;
+}
+
+/* Main */
+#main{
+display:none;
+height:100%;
+}
+
+/* Lustrous Text */
+#floatingWish{
+position:fixed;
+top:36%;
+left:50%;
+transform:translate(-50%,-50%);
+font-family:'Pacifico',cursive;
+font-size:64px;
+text-align:center;
+width:95%;
+opacity:0;
+z-index:200;
+
+background:linear-gradient(120deg,#ff1b8d,#ff7ac7,#ffd0ec,#ff1b8d);
+background-size:300% 300%;
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+
+animation:floatText 3s ease-in-out infinite, shine 2.5s linear infinite;
+}
+
+@keyframes shine{
+0%{background-position:0% 50%}
+100%{background-position:100% 50%}
+}
+
+@keyframes floatText{
+0%{transform:translate(-50%,-50%)}
+50%{transform:translate(-50%,-65%)}
+100%{transform:translate(-50%,-50%)}
+}
+
+/* Cats */
+.cat{
+position:absolute;
+opacity:0;
+}
+
+#centerCat{
+left:50%;
+top:60%;
+width:240px;
+transform:translate(-50%,-50%);
+}
+
+.left1{left:-240px;top:65%;width:180px}
+.left2{left:-240px;top:38%;width:170px}
+
+.right1{right:-240px;top:65%;width:180px}
+.right2{right:-240px;top:38%;width:170px}
+
+/* Jump Animations */
+.leftJump{animation:leftJump 1s forwards}
+.rightJump{animation:rightJump 1s forwards}
+.centerJump{animation:centerJump 1s forwards}
+
+@keyframes leftJump{to{left:5%;opacity:1}}
+@keyframes rightJump{to{right:5%;opacity:1}}
+@keyframes centerJump{to{opacity:1}}
+
+/* Party Poppers */
+.popper{
+position:absolute;
+font-size:28px;
+animation:pop 2s forwards;
+}
+
+@keyframes pop{
+0%{transform:scale(0);opacity:1}
+100%{transform:scale(2);opacity:0}
+}
+
+/* Button */
+#nextBtn{
+position:fixed;
+bottom:25px;
+left:50%;
+transform:translateX(-50%);
+padding:18px 40px;
+font-size:22px;
+border:none;
+border-radius:40px;
+background:#ff1493;
+color:white;
+cursor:pointer;
+display:none;
+}
+
+/* Mobile Responsive */
+@media (max-width:768px){
+
+#floatingWish{
+font-size:9vw;
+top:34%;
+}
+
+#centerCat{
+width:190px;
+}
+
+.left1,.right1{
+width:140px;
+}
+
+.left2,.right2{
+width:130px;
+}
+
+#nextBtn{
+font-size:18px;
+padding:14px 30px;
+}
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="intro">Tap the screen for surprise</div>
+
+<div id="main">
+
+<img src="https://i.postimg.cc/g2MgzKJL/left_most_cat.png" class="cat left1" id="l1">
+<img src="https://i.postimg.cc/hPBypj6Q/Right_and_Left_Cat.png" class="cat left2" id="l2">
+
+<img src="https://i.postimg.cc/Znk7kKqM/Right_most_cat.png" class="cat right1" id="r1">
+<img src="https://i.postimg.cc/hPBypj6Q/Right_and_Left_Cat.png" class="cat right2" id="r2">
+
+<img src="https://i.postimg.cc/d1ypXwXh/main_cat.png" class="cat" id="centerCat">
+
+<div id="floatingWish">
+Happiest Birthday to the Most Cuutteesstttt, Beautiful, Sweetessttt and Soft Hearted Princess in the world
+</div>
+
+<button id="nextBtn">Lets cut the cake</button>
+
+</div>
+
+<audio id="catSound" src="https://files.catbox.moe/6mldjk.mp3"></audio>
+
+<script>
+
+const intro=document.getElementById("intro");
+const main=document.getElementById("main");
+const sound=document.getElementById("catSound");
+
+const l1=document.getElementById("l1");
+const l2=document.getElementById("l2");
+const r1=document.getElementById("r1");
+const r2=document.getElementById("r2");
+const center=document.getElementById("centerCat");
+const wish=document.getElementById("floatingWish");
+const btn=document.getElementById("nextBtn");
+
+intro.onclick=()=>{
+intro.style.display="none";
+main.style.display="block";
+
+l1.classList.add("leftJump");
+l2.classList.add("leftJump");
+r1.classList.add("rightJump");
+r2.classList.add("rightJump");
+setTimeout(()=>center.classList.add("centerJump"),400);
+
+startPoppers();
+
+setTimeout(()=>sound.play(),1500);
+setTimeout(()=>wish.style.opacity=1,700);
+setTimeout(()=>btn.style.display="block",2500);
+};
+
+function startPoppers(){
+let start=Date.now();
+let i=setInterval(()=>{
+for(let j=0;j<14;j++){
+let p=document.createElement("div");
+p.className="popper";
+p.innerHTML="🎉";
+p.style.left=Math.random()*100+"%";
+p.style.top=Math.random()*100+"%";
+document.body.appendChild(p);
+setTimeout(()=>p.remove(),2000);
+}
+if(Date.now()-start>2500)clearInterval(i);
+},90);
+}
+
+/* ✅ PAGE LINKING */
+btn.onclick=()=>{
+ window.location.href="cake.html";
+};
+
+</script>
+
+</body>
+</html>
