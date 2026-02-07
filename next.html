@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our Memories</title>
+
+<style>
+
+body{
+margin:0;
+height:100vh;
+background:linear-gradient(#ff5fa2,#ffd1e8);
+overflow:hidden;
+font-family:Segoe UI,sans-serif;
+}
+
+/* BACK BUTTON */
+#backBtn{
+position:fixed;
+top:18px;
+left:18px;
+background:rgba(255,255,255,.35);
+border:none;
+padding:10px 16px;
+border-radius:30px;
+color:white;
+font-size:16px;
+cursor:pointer;
+backdrop-filter:blur(6px);
+z-index:1000;
+}
+
+/* Hidden cards */
+.photo{
+position:absolute;
+width:110px;
+height:150px;
+border-radius:18px;
+background:black;
+display:flex;
+align-items:center;
+justify-content:center;
+color:white;
+font-size:48px;
+font-weight:bold;
+cursor:pointer;
+box-shadow:0 0 15px rgba(255,255,255,.6);
+animation:float 4s infinite ease-in-out;
+overflow:hidden;
+}
+
+.photo img{
+width:100%;
+height:100%;
+object-fit:cover;
+display:none;
+}
+
+/* Float */
+@keyframes float{
+50%{transform:translateY(-35px)}
+}
+
+/* Overlay */
+#overlay{
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.6);
+justify-content:center;
+align-items:center;
+flex-direction:column;
+color:white;
+z-index:999;
+}
+
+#overlay img{
+width:280px;
+max-width:80%;
+border-radius:20px;
+box-shadow:0 0 25px white;
+}
+
+#msg{
+margin-top:15px;
+font-size:20px;
+text-align:center;
+padding:0 20px;
+}
+
+/* Emojis */
+.heart{
+position:fixed;
+animation:fall linear forwards;
+pointer-events:none;
+}
+
+@keyframes fall{
+to{transform:translateY(120vh);opacity:0}
+}
+
+/* Button */
+#nextBtn{
+display:none;
+position:fixed;
+bottom:25px;
+left:50%;
+transform:translateX(-50%);
+padding:14px 34px;
+border:none;
+border-radius:40px;
+background:#ff2f92;
+color:white;
+font-size:18px;
+cursor:pointer;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- BACK BUTTON -->
+<button id="backBtn" onclick="history.back()">← Back</button>
+
+<div id="container"></div>
+
+<div id="overlay">
+<img id="bigImg">
+<div id="msg"></div>
+</div>
+
+<button id="nextBtn" onclick="location.href='page4.html'">Final surprise...</button>
+
+<script>
+
+let images=[
+"https://i.postimg.cc/MpH3zQhT/Harman_4.jpg",
+"https://i.postimg.cc/y6Qkx7fp/image_for_lline_2.jpg",
+"https://i.postimg.cc/jqFSKZ5y/image_for_line_3.jpg",
+"https://i.postimg.cc/G35mrq2y/image_for_line_4.jpg",
+"https://i.postimg.cc/k5Yg4csS/Whats_App_Image_2026_01_30_at_12_16_13_PM_(1).jpg",
+"https://i.postimg.cc/sxqjcDq2/Mix_Collage_02_Feb_2026_08_27_PM_9526.jpg",
+"https://i.postimg.cc/jd1wgRPd/image_for_line_7.jpg",
+"https://i.postimg.cc/j5vQCB94/Whats_App_Image_2026_01_30_at_12_15_41_PM_(1).jpg",
+"https://i.postimg.cc/X7PGHndv/image_for_line_9.jpg",
+"https://i.postimg.cc/RFPKvK6d/Whats_App_Image_2026_01_30_at_12_16_14_PM_(1).jpg",
+"https://i.postimg.cc/L6WYCmL2/image_for_line_11.jpg",
+"https://i.postimg.cc/Nfn9JQmt/image_for_line_12.jpg"
+];
+
+let messages=[
+"You don’t just make me smile… you somehow make even my dull days feel brighter and warmer, and I honestly feel lucky every day to have you in my life 🌞💖🍀",
+"My favorite person, today and always — someone I’m truly grateful to have, because some people are pure magic and you’re definitely one of those rare souls 🤗✨🥰",
+"My comfort person, my happy place, and one of my biggest blessings — you’re not just a friend, you truly make my world better 🤍🌸",
+"You are sunshine mixed with kindness, and it shows in everything you do… effortlessly beautiful, inside and out, in ways words can’t explain 🌞✨🌸",
+"our connections are rare and ours is something I truly treasure — you are genuinely special, and your kindness makes you shine 💎🤍",
+"You are my favorite chapter in life’s story, one I’ll always reread, and I’ll forever be thankful for your friendship and the bond we share 📖💖🫶",
+"Cheers to us and all the countless memories still waiting for us — my favorite vibe will always be you and your beautiful energy 🥂✨🌷",
+"You’re my happy coincidence, one of life’s sweetest surprises, and honestly one of life’s sweetest gifts that I’ll always value 🍀💞🎁",
+"My safe space, my bestie, and someone I truly cherish — forever proud of the person you are and the heart you carry 🤗🌸✨",
+"You deserve all the happiness this world has to offer, and I’ll always be here for you, in every phase, always 🌍💞🤗",
+"You honestly mean more to me than words can ever explain, thank you for choosing me as your friend and trusting me with your world 🥹💖🤍",
+"Just know this — you’re special in ways you don’t even realize, and I’m grateful for you today, tomorrow, and always 😌🌷💗"
+];
+
+/* 🎵 WORKING DROPBOX DIRECT LINKS */
+let music=[
+"https://www.dropbox.com/scl/fi/eg621az7wknfcebqr2ebk/Sufna-Banke.mp3?dl=1",
+"https://www.dropbox.com/scl/fi/ranuwuthf7qth0lv8oe5s/Haseen-Arjan-part-1-Dhillon-1.mp3?dl=1",
+"https://www.dropbox.com/scl/fi/v13quvfncluyt6bb11q83/Chand-Wargi-Nirvair-Pannu.mp3?dl=1",
+"https://www.dropbox.com/scl/fi/wfno6gjv1rjcpzqnzg9rr/Oye-Hoye-Nirvair-Pannu-22.mp3?dl=1",
+"https://www.dropbox.com/scl/fi/699xvtfv06fmrbyyu8www/Waalian-Harnoor.mp3?dl=1",
+"https://www.dropbox.com/scl/fi/92431dze19kw92t0z5nf8/Sheesha-Karan-Aujla.mp3?dl=1",
+"https://www.dropbox.com/scl/fi/efvy05o0huk8ofxydc529/Sifat-Nirvair-Pannu.mp3?dl=1",
+"https://www.dropbox.com/scl/fi/wuw0diued3nsr51p9ysqa/Sufna-Banke-2.mp3?dl=1"
+];
+
+let audio=new Audio();
+audio.loop=true;
+
+let container=document.getElementById("container");
+let overlay=document.getElementById("overlay");
+let big=document.getElementById("bigImg");
+let msg=document.getElementById("msg");
+let nextBtn=document.getElementById("nextBtn");
+
+/* Random non overlapping placement */
+let placed=[];
+
+function placeCard(card){
+let tries=0;
+while(tries<200){
+let x=Math.random()*(window.innerWidth-130);
+let y=Math.random()*(window.innerHeight-170);
+let ok=true;
+for(let p of placed){
+if(Math.abs(p.x-x)<130 && Math.abs(p.y-y)<170) ok=false;
+}
+if(ok){
+placed.push({x,y});
+card.style.left=x+"px";
+card.style.top=y+"px";
+return;
+}
+tries++;
+}
+}
+
+/* Create cards */
+images.forEach((src,i)=>{
+let d=document.createElement("div");
+d.className="photo";
+d.innerHTML="?";
+
+let img=document.createElement("img");
+img.src=src;
+d.appendChild(img);
+
+placeCard(d);
+
+d.onclick=()=>{
+d.style.transform="scale(1.2)";
+d.innerHTML="";
+img.style.display="block";
+
+big.src=src;
+msg.innerHTML=messages[i];
+overlay.style.display="flex";
+nextBtn.style.display="block";
+
+/* 🎶 MUSIC PLAY */
+let songIndex = i < music.length ? i : i - music.length;
+audio.pause();
+audio.src = music[songIndex];
+audio.currentTime = 0;
+audio.play();
+};
+
+container.appendChild(d);
+});
+
+/* Close overlay + stop music */
+overlay.onclick=()=>{
+overlay.style.display="none";
+audio.pause();
+audio.currentTime=0;
+};
+
+/* Emoji rain */
+function heart(){
+let emojis=["❤️","❤️","❤️","❤️","🤗","🥰","✨"];
+for(let i=0;i<3;i++){
+let h=document.createElement("div");
+h.className="heart";
+h.innerHTML=emojis[Math.floor(Math.random()*emojis.length)];
+h.style.left=Math.random()*100+"vw";
+h.style.fontSize=18+Math.random()*36+"px";
+h.style.animationDuration=2+Math.random()*3+"s";
+document.body.appendChild(h);
+setTimeout(()=>h.remove(),5000);
+}
+}
+setInterval(heart,80);
+
+</script>
+
+</body>
+</html>

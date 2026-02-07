@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Cake Surprise</title>
+
+<style>
+
+body{
+margin:0;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:#ff7bbd;
+font-family:Segoe UI,sans-serif;
+overflow:hidden;
+}
+
+#wrap{text-align:center;position:relative;}
+#cakeArea{position:relative;}
+
+#cake{width:360px;transition:.5s;}
+
+.half{
+display:none;
+position:absolute;
+top:0;
+height:100%;
+width:50%;
+background:url("https://i.postimg.cc/0yXB2KqV/Chat_GPT_Image_Jan_28_2026_09_39_06_PM_removebg_preview.png") no-repeat;
+background-size:200% 100%;
+}
+
+#leftHalf{left:0;background-position:left;transition:.8s;}
+#rightHalf{right:0;background-position:right;transition:.8s;}
+
+.candle{
+position:absolute;
+top:35px;width:26px;height:110px;
+background:linear-gradient(#fff,#ffb3d9 70%,transparent);
+border-radius:8px;
+}
+
+.flame{
+position:absolute;
+top:-30px;left:4px;width:18px;height:30px;
+background:radial-gradient(circle,#fff,orange,red);
+clip-path:polygon(50% 0%,65% 30%,100% 60%,50% 100%,0% 60%,35% 30%);
+animation:flicker .2s infinite alternate;
+cursor:pointer;
+}
+
+@keyframes flicker{to{transform:scale(1.2)}}
+
+#c1{left:65px}
+#c2{left:135px}
+#c3{left:205px}
+#c4{left:275px}
+
+#knife{
+display:none;width:210px;position:absolute;
+right:-100px;top:60%;
+transform:translateY(-50%);
+transition:.6s;cursor:pointer;
+}
+
+#cmd{margin-top:20px;font-size:20px;color:white;}
+
+#big{
+display:none;
+position:fixed;
+bottom:-200px;width:100%;
+text-align:center;
+font-size:38px;font-weight:800;color:white;
+animation:jump 1s forwards,float 3s infinite ease-in-out;
+}
+
+@keyframes jump{to{bottom:70%}}
+@keyframes float{50%{transform:translateY(-25px)}}
+
+#finalText{
+display:none;
+position:fixed;
+bottom:-300px;
+width:100%;
+text-align:center;
+color:white;
+animation:finalJump 1.2s forwards,finalFloat 3s infinite ease-in-out;
+}
+
+#finalText h1{margin:0;font-size:48px;}
+#finalText h2{margin-top:12px;font-size:34px;}
+
+@keyframes finalJump{to{bottom:68%}}
+@keyframes finalFloat{50%{transform:translateY(-25px)}}
+
+.pop,.heart{position:fixed;animation:fall linear forwards;}
+@keyframes fall{to{transform:translateY(120vh);opacity:0}}
+
+@media(max-width:768px){
+#cake{width:260px}
+#knife{width:160px}
+#finalText h1{font-size:34px}
+#finalText h2{font-size:24px}
+}
+
+/* BUTTON */
+#nextBtn{
+display:none;
+position:fixed;
+bottom:25px;
+left:50%;
+transform:translateX(-50%);
+padding:14px 34px;
+border:none;
+border-radius:40px;
+background:#ff2f92;
+color:white;
+font-size:18px;
+cursor:pointer;
+box-shadow:0 0 15px rgba(255,255,255,.5);
+}
+
+/* BACK BUTTON */
+#backBtn{
+position:fixed;
+top:18px;
+left:18px;
+background:rgba(255,255,255,.35);
+border:none;
+padding:10px 16px;
+border-radius:30px;
+color:white;
+font-size:16px;
+cursor:pointer;
+backdrop-filter:blur(6px);
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- BACK BUTTON -->
+<button id="backBtn" onclick="history.back()">← Back</button>
+
+<!-- AUDIO -->
+<audio id="bgMusic" src="https://www.dropbox.com/scl/fi/55t9esvgj3vidum8x3srx/bayside-breeze.mp3?dl=1" loop></audio>
+
+<audio id="yaySound" src="https://www.dropbox.com/scl/fi/0mltibx4bgxpuu127pzfo/yay-6326.mp3?dl=1"></audio>
+
+<audio id="boxSound" src="https://www.dropbox.com/scl/fi/mzd2i1gqy2rn3bosyuv2l/music-box-birthday.mp3?dl=1"></audio>
+
+<div id="wrap">
+
+<div id="cakeArea">
+
+<img id="cake" src="https://i.postimg.cc/0yXB2KqV/Chat_GPT_Image_Jan_28_2026_09_39_06_PM_removebg_preview.png">
+
+<div id="leftHalf" class="half"></div>
+<div id="rightHalf" class="half"></div>
+
+<div class="candle" id="c1"><div class="flame"></div></div>
+<div class="candle" id="c2"><div class="flame"></div></div>
+<div class="candle" id="c3"><div class="flame"></div></div>
+<div class="candle" id="c4"><div class="flame"></div></div>
+
+<img id="knife" src="https://i.postimg.cc/W1LPTTds/website_knife.png">
+
+</div>
+
+<div id="cmd">Tap the flames</div>
+
+</div>
+
+<div id="big">Happiiieesssttt Birthday My Cuttiieesssttt Doll 🧸❤️🤗</div>
+
+<div id="finalText">
+<h1>Huuurrrraaaaaaaayyyyyyyyyyyyy!!!!!!!!</h1>
+<h2>Happiest Birthday Once Again My Princess ji 😊❤️</h2>
+</div>
+
+<button id="nextBtn" onclick="location.href='next.html'">Let me show u something...</button>
+
+<script>
+
+let flames=document.querySelectorAll(".flame");
+let candles=document.querySelectorAll(".candle");
+let cmd=document.getElementById("cmd");
+let knife=document.getElementById("knife");
+let cake=document.getElementById("cake");
+let left=document.getElementById("leftHalf");
+let right=document.getElementById("rightHalf");
+let big=document.getElementById("big");
+let finalText=document.getElementById("finalText");
+let nextBtn=document.getElementById("nextBtn");
+
+let bgMusic=document.getElementById("bgMusic");
+let yaySound=document.getElementById("yaySound");
+let boxSound=document.getElementById("boxSound");
+
+/* START BACKGROUND MUSIC ON FIRST USER INTERACTION */
+document.body.addEventListener("click",()=>{
+bgMusic.play().catch(()=>{});
+},{once:true});
+
+function pop(){
+let p=document.createElement("div");
+p.className="pop";
+p.innerHTML="🎉";
+p.style.left=Math.random()*100+"vw";
+p.style.fontSize=15+Math.random()*30+"px";
+p.style.animationDuration=1+Math.random()*2+"s";
+document.body.appendChild(p);
+setTimeout(()=>p.remove(),3000);
+}
+
+function heart(){
+let h=document.createElement("div");
+h.className="heart";
+h.innerHTML="❤️";
+h.style.left=Math.random()*100+"vw";
+h.style.fontSize=15+Math.random()*35+"px";
+h.style.animationDuration=2+Math.random()*3+"s";
+document.body.appendChild(h);
+setTimeout(()=>h.remove(),5000);
+}
+
+flames.forEach(f=>{
+f.onclick=()=>{
+
+flames.forEach(x=>x.style.display="none");
+candles.forEach(c=>c.style.display="none");
+cmd.innerHTML="";
+big.style.display="block";
+
+let burst=setInterval(()=>{pop();heart();},40);
+
+setTimeout(()=>{
+clearInterval(burst);
+knife.style.display="block";
+cmd.innerHTML="Tap the Knife to cut the cake";
+},5000);
+
+};
+});
+
+knife.onclick=()=>{
+
+big.style.display="none";
+cmd.innerHTML="";
+
+knife.style.transform="translate(-80px,-50%)";
+
+setTimeout(()=>{knife.style.top="calc(60% + 120px)";},600);
+setTimeout(()=>{
+knife.style.transform="translateY(-50%)";
+knife.style.top="60%";
+},1200);
+
+setTimeout(()=>{
+left.style.display="block";
+right.style.display="block";
+cake.style.opacity="0";
+left.style.transform="translateX(-50px)";
+right.style.transform="translateX(50px)";
+finalText.style.display="block";
+
+/* SOUND SEQUENCE */
+yaySound.play();
+yaySound.onended=()=>{
+boxSound.play();
+};
+
+setTimeout(()=>{nextBtn.style.display="block";},3000);
+
+let finalBurst=setInterval(()=>{pop();heart();},60);
+setTimeout(()=>clearInterval(finalBurst),5000);
+
+},1300);
+
+setTimeout(()=>{knife.style.display="none";},5200);
+
+};
+
+</script>
+
+</body>
+</html>
